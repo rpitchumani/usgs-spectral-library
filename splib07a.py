@@ -6,6 +6,7 @@ from typing import Dict
 from loguru import logger
 from pathlib import Path
 import pandas as pd
+import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 
 
@@ -113,8 +114,7 @@ class SPLIB07A:
         
         # logger.info(df_material)
         
-        return dict_wavelength
-        
+        return dict_wavelength        
     
     def plotly_wavelength(self, dict_wavelength: Dict) -> go.Figure:
         
@@ -170,3 +170,39 @@ class SPLIB07A:
         )
         
         return fig
+    
+    def plot_wavelength(self, dict_wavelength: Dict) -> plt.Figure:
+                
+        plt.style.use("seaborn-whitegrid")
+        
+        plt.rcParams["figure.figsize"] = [6, 3.50]
+        plt.rcParams["figure.autolayout"] = True
+        plt.rcParams["axes.edgecolor"] = "black"
+        plt.rcParams["axes.linewidth"] = 2
+        plt.rcParams["figure.dpi"] = 200
+        
+        fig, ax = plt.subplots()
+        
+        information_wavelengths = (
+            dict_wavelength.get("information_wavelengths")
+        )
+        
+        information_spectrum = (
+            dict_wavelength.get("information_spectrum")
+        )
+        
+        df_wavelengths = dict_wavelength.get("df_wavelengths")
+        df_spectrum = dict_wavelength.get("df_spectrum")
+        
+        ax.plot(
+            df_wavelengths["wavelength (micron)"],
+            df_spectrum["value"],
+            "-"           
+        )
+        
+        ax.set_title(f"{information_spectrum}")
+        ax.set_xlabel("Wavelength (µm)")
+        ax.set_ylabel("Reflectance")
+        
+        return fig    
+        
